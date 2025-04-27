@@ -10,7 +10,7 @@
     "test.e2e": "cypress run",
     "test.unit": "vitest",
     "lint": "eslint",
-    "deploy:render": "serve -s build"
+    "deploy:render": "serve -s dist"
   },
   "dependencies": {
     "@ionic/react": "^8.5.5",
