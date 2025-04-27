@@ -3,7 +3,7 @@ import Cliente from "./Cliente";
 export async function registrarCliente(cliente: Cliente) {
     const url = 'http://127.0.0.1:8000/api/auth/register/'; // URL de tu endpoint de login
     const body = {
-        nombre_completo: cliente.nombre_completo,
+        nombre_completo: cliente.nombre,
         email: cliente.email,
         password: cliente.password,
         telefono: cliente.telefono,

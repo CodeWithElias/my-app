@@ -75,7 +75,7 @@ const CarritoPage: React.FC = () => {
         
         <IonCard>                
           
-          <IonGrid className="table">
+          <IonGrid className="table-car">
               <IonRow>
                 
                   <IonCol>Producto</IonCol>
@@ -90,7 +90,7 @@ const CarritoPage: React.FC = () => {
                       
                       <IonCol>{cata.nombre}</IonCol>
                       <IonCol>{cata.cantidad}</IonCol>
-                      <IonCol>{cata.precio}</IonCol>
+                      <IonCol>{cata.precio + ' bs'}</IonCol>
                       <IonCol > 
                         
                         <IonButton  fill="clear"

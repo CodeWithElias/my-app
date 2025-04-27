@@ -1,7 +1,6 @@
 // src/pages/Cliente/authContext.tsx
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import Usuario from './Cliente'
-
 
 // Definir la estructura del contexto
 interface AuthContextType {
@@ -15,8 +14,23 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [inicioSesion, setInicioSesion] = useState(false);
-  const [usuarioLogin, setUsuarioLogin] = useState<Usuario | null>(null);
+  const [inicioSesion, setInicioSesion] = useState(() => {
+    const storedInicioSesion = localStorage.getItem('inicioSesion');
+    return storedInicioSesion ? JSON.parse(storedInicioSesion) : false;
+  });
+
+  const [usuarioLogin, setUsuarioLogin] = useState<Usuario | null>(() => {
+    const storedUsuarioLogin = localStorage.getItem('usuarioLogin');
+    return storedUsuarioLogin ? JSON.parse(storedUsuarioLogin) : null;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('inicioSesion', JSON.stringify(inicioSesion));
+  }, [inicioSesion]);
+
+  useEffect(() => {
+    localStorage.setItem('usuarioLogin', JSON.stringify(usuarioLogin));
+  }, [usuarioLogin]);
 
   return (
     <AuthContext.Provider value={{ inicioSesion, setInicioSesion, usuarioLogin, setUsuarioLogin }}>

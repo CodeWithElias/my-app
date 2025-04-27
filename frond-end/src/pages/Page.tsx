@@ -58,7 +58,7 @@ const Page: React.FC = () => {
       <IonPage>
         <IonContent className='content'>
           
-          <img className='img' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeHCZQ8khfUWtt5SGvr-0vMv7Q2ckyghFOaw&s'></img>
+          <img className='img' src='https://i.pinimg.com/736x/fe/e3/c2/fee3c249f7f5ed43cec103cf37f9170c.jpg'></img>
           <h2 className='titulo-page'>E-COMMERCE</h2>
   
           <IonTitle id='title'>Productos</IonTitle>
@@ -73,10 +73,10 @@ const Page: React.FC = () => {
                                   src={cata.imagen_url}
                                   alt="Producto del negocio"
                               ></img>
-                              <IonLabel>{cata.descripcion}</IonLabel>
-                              <IonLabel>{cata.precio}</IonLabel>
+                              <IonLabel className='descripcion-label'>{cata.descripcion}</IonLabel>
+                              <IonLabel className='precio-label'>{cata.precio+' bs'}</IonLabel>
                               <IonLabel>{cata.stock}</IonLabel>
-                              <IonButton onClick={() => {
+                              <IonButton id="boton-agregar" onClick={() => {
                                                 if (inicioSesion) {
                                                   if (cata.id !== undefined) {
                                                     agregarCarrito(Number(cata.id));
@@ -89,11 +89,8 @@ const Page: React.FC = () => {
                           </IonCol>
                       ))}
                       </IonRow>  
-                  </IonGrid>      
+          </IonGrid>      
 
-          <IonFooter className='footer'>
-            contactos y atocinadores
-          </IonFooter>
         </IonContent>
       </IonPage>
     );

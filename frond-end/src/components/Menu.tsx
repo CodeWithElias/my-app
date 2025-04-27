@@ -15,9 +15,9 @@ import {
   IonIcon,
 } from '@ionic/react';
 
-import { people, peopleOutline, home, homeOutline, cog, cogOutline, 
-  bookOutline, book, radio, radioOutline, 
-  cash, cashOutline, logoWhatsapp, menu, close,
+import { people, peopleOutline, home, homeOutline, 
+  bookOutline, book, 
+  logoWhatsapp, menu, close,
   cart,
   cartOutline,
   person} from 'ionicons/icons';
@@ -26,7 +26,6 @@ import { people, peopleOutline, home, homeOutline, cog, cogOutline,
 import { useMediaQuery } from 'react-responsive'; 
 import { useHistory } from 'react-router-dom';
 import '../components/Menu.css';
-import { IonImg } from '@ionic/react';
 import ReactDOM from 'react-dom';
 import { useAuth } from '../pages/Cliente/authContext';
 
@@ -80,7 +79,7 @@ const Header: React.FC = () => {
 
   const history = useHistory();
   const isMobile = useMediaQuery({ query: '(max-width: 800px)' });
-
+  const {inicioSesion} = useAuth()
 
   useEffect(() =>{
 
@@ -100,14 +99,13 @@ const Header: React.FC = () => {
 
 
       const [isPortalOpen, setIsPortalOpen] = useState(false);
-      const {inicioSesion} = useAuth();
   
       const portalContent = isPortalOpen && (
           <div className="user-portal-overlay">
               <div  className="user-portal-content" onClick={(e) => e.stopPropagation()}>
 
-              <IonItem button onClick={() => inicioSesion == true ? history.push("/perfil") : (history.push("/login"))}>
-                <IonLabel>{inicioSesion ? "Perfil de Usuario" : "Inicia Sesión"}</IonLabel>
+              <IonItem button onClick={() => inicioSesion == true ? history.push("/perfil") : (history.push("/login")) }>
+                <IonLabel>{inicioSesion ? "Perfil" : "Inicia Sesión"}</IonLabel>
               </IonItem>
 
               <IonItem button onClick={() => inicioSesion == true ? cerrarSesion() : (history.push("/registrarse"))}>

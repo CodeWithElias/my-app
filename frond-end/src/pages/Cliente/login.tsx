@@ -1,4 +1,4 @@
-import { IonButtons, IonContent, IonHeader, IonInput, IonInputPasswordToggle, IonMenuButton, IonPage, IonTitle, IonToolbar, IonButton } from '@ionic/react';
+import { IonButtons, IonContent, IonHeader, IonInput, IonInputPasswordToggle, IonMenuButton, IonPage, IonTitle, IonToolbar, IonButton, IonLabel } from '@ionic/react';
 import './login.css';
 import { useEffect, useState } from 'react';
 import { loginCustomer } from './loginApi';
@@ -11,7 +11,7 @@ const Login: React.FC = () => {
     const { name } = useParams<{ name: string }>();
     const [cliente, setCliente] = useState<Cliente>({});
 
-    const {inicioSesion, setInicioSesion, usuarioLogin, setUsuarioLogin} = useAuth();
+    const {setInicioSesion, setUsuarioLogin} = useAuth();
 
     useEffect(() => {
         search();
@@ -53,8 +53,7 @@ const Login: React.FC = () => {
                 console.error("Error en la petición:", error.message);
                 } else {
                 console.error("Error en la petición:", error);
-              }
-              
+            }
         }
     };
 
@@ -70,31 +69,30 @@ const Login: React.FC = () => {
                 </IonToolbar>
             </IonHeader>
             <IonContent fullscreen>
-                <section>
+                <section className='section-register'>
                     <div className='login'>
-                        <IonTitle className='title'>Iniciar Sesión</IonTitle>
+                        <IonTitle className='title-registro'>Iniciar Sesión</IonTitle>
 
+                        <IonLabel className='title-label'>Correo Electronico</IonLabel>
                         <IonInput
                             className='input'
                             onIonChange={e => setCliente({ ...cliente, email: String(e.detail.value) })}
                             type="email"
-                            label="Correo Electrónico"
-                            placeholder="usuario@gmail.com"
                         />
-
+                        <IonLabel className='title-label'>Contraseña</IonLabel>
                         <IonInput
                             className='input'
                             onIonChange={e => setCliente({ ...cliente, password: String(e.detail.value) })}
                             type="password"
-                            label="Contraseña"
                         >
                             <IonInputPasswordToggle slot="end"></IonInputPasswordToggle>
                         </IonInput>
 
                         <a href="#">Olvidé mi contraseña</a>
-
-                        <IonButton onClick={() => login()}>Iniciar</IonButton>
-                        <IonButton onClick={() => history.push("/registrarse")}>Crear Cuenta</IonButton>
+                        <div className='botones'>
+                            <IonButton onClick={() => login()}>Iniciar</IonButton>
+                            <IonButton onClick={() => history.push("/registrarse")}>Crear Cuenta</IonButton>
+                        </div>
                     </div>
                 </section>
             </IonContent>

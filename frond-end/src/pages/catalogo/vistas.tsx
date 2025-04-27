@@ -1,9 +1,8 @@
-import { IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonLabel, IonMenuButton, IonPage, IonRow, IonTitle, IonToolbar, IonButton } from '@ionic/react';
+import { IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonLabel, IonMenuButton, IonPage, IonRow, IonTitle, IonToolbar, IonButton, IonAccordionGroup, IonAccordion, IonItem } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import {  useHistory, useParams } from 'react-router';
 import catologo from './catalogo';
-import { buscarCatalogo } from './catalogoApi';
-import './style.css'
+import { buscarCatalogo, mostrarProductoPorCategoria } from './catalogoApi';
 import { useAuth } from '../Cliente/authContext';
 import { agregarAlCarrito } from '../carrito/carritoApi';
 import Carrito from '../carrito/carrito';
@@ -29,14 +28,25 @@ const Vistas: React.FC = () => {
         let result = await buscarCatalogo();
             
         if (!Array.isArray(result)) {
-            console.error("Error: No se pudo obtener la lista de clientes.");
-        return;
+            console.error("Error: No se pudo obtener la lista de Productos.");
+          return;
+        }
+      setCatalogo(result);
     }
-        setCatalogo(result);
+
+
+    const mostrarPorCategoria = async (categ_id: number) => {
+
+      let result = await mostrarProductoPorCategoria(categ_id);
+
+      if (!Array.isArray(result)){
+        console.error("Error: No se pudo obtener la lista de Productos")
+        return ;
+      }
+      setCatalogo(result);
     }
 
-
-
+    
     const agregarCarrito = async (id_prod: number) => {
       if (usuarioLogin && usuarioLogin.id) {
         const nuevoCarrito = {
@@ -48,9 +58,7 @@ const Vistas: React.FC = () => {
         setCarrito([nuevoCarrito]);
         const response = await agregarAlCarrito(nuevoCarrito);
         console.log("Respuesta de la API:", response);
-
       }
-      
     };
 
 
@@ -65,40 +73,54 @@ const Vistas: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        
-        <div className='botones'>
-          <IonButton>mostrar por marca</IonButton>
-          <IonButton>mostrar por categoria</IonButton>
-        </div>  
-        
-        <IonGrid className="table">
-            <IonRow className='table-item-row'>
-            {catalogo.map((cata: catologo) =>
-                <IonCol className='table-item' key={cata.id}>
-                    <IonLabel className='titulo'>{cata.nombre}</IonLabel>
-                      <img
-                        className='imagen'
-                        src={cata.imagen_url}
-                        alt="Producto del negocio"
-                      ></img>
-                    <IonLabel>{cata.descripcion}</IonLabel>
-                    <IonLabel className='precio-label'>{cata.precio}</IonLabel>
-                    <IonLabel >{cata.stock}</IonLabel>
-                    <IonButton onClick={() => {
-                                                if (inicioSesion) {
-                                                  if (cata.id !== undefined) {
-                                                    agregarCarrito(Number(cata.id));
-                                                  }
-                                                } else {
-                                                  history.push("/login");
-                                                }
-                                              }}
-                    >agregar al carrito</IonButton>
+          
+        <IonAccordionGroup>
+          {/* Acordeón de Categorías */}
+          <IonAccordion value="categorias">
+            <IonItem slot="header">
+              <IonLabel>Selecciona una categoría</IonLabel>
+            </IonItem>
+            <div slot="content">
+              {/* Botones dentro del acordeón */}
+              <IonButton expand="block" onClick={() => mostrarPorCategoria(1)}>Telefonos</IonButton>
+              <IonButton expand="block" onClick={() => mostrarPorCategoria(2)}>Computadoras</IonButton>
+              <IonButton expand="block" onClick={() => mostrarPorCategoria(3)}>Tabletas</IonButton>
+              <IonButton expand="block" onClick={() => mostrarPorCategoria(4)}>Accesorios</IonButton>
+              <IonButton expand="block" onClick={() => mostrarPorCategoria(5)}>Televisores</IonButton>
+              <IonButton expand="block" onClick={() => mostrarPorCategoria(6)}>Electrodomésticos</IonButton>
+              <IonButton expand="block" onClick={() => mostrarPorCategoria(7)}>Audio</IonButton>
+              <IonButton expand="block" onClick={() => mostrarPorCategoria(8)}>Cámaras</IonButton>
+            </div>
+          </IonAccordion>
+        </IonAccordionGroup>
 
-                </IonCol>
-            )}
-            </IonRow>  
-        </IonGrid>      
+          <IonGrid className="table">
+              <IonRow className='table-item-row'>
+              {catalogo.map((cata: catologo) => (
+                  <IonCol className='table-item' key={cata.id}>
+                      <IonLabel className='titulo'>{cata.nombre}</IonLabel>
+                      <img
+                          className='imagen'
+                          src={cata.imagen_url}
+                          alt="Producto del negocio"
+                      ></img>
+                      <IonLabel className='descripcion-label'>{cata.descripcion}</IonLabel>
+                      <IonLabel className='precio-label'>{cata.precio+' bs'}</IonLabel>
+                      <IonLabel>{cata.stock}</IonLabel>
+                      <IonButton id="boton-agregar" onClick={() => {
+                                        if (inicioSesion) {
+                                          if (cata.id !== undefined) {
+                                            agregarCarrito(Number(cata.id));
+                                          }
+                                        } else {
+                                          history.push("/login");
+                                        }
+                                      }}
+                      >agregar al carrito</IonButton>
+                  </IonCol>
+              ))}
+              </IonRow>  
+          </IonGrid>      
         
       </IonContent>
     </IonPage>

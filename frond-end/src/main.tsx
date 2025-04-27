@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App';
 import { IonApp } from '@ionic/react';
 import { AuthProvider } from './pages/Cliente/authContext';
+import { IonReactRouter } from '@ionic/react-router';
 
 // Obtener el contenedor de la app
 const container = document.getElementById('root');
@@ -11,10 +12,12 @@ const container = document.getElementById('root');
 const root = createRoot(container!);
 root.render(
   <React.StrictMode>
-    <AuthProvider>
-      <IonApp>
-        <App />
-      </IonApp>
-    </AuthProvider>
+    <IonReactRouter>
+      <AuthProvider>
+        <IonApp>
+          <App />
+        </IonApp>
+      </AuthProvider>
+    </IonReactRouter>
   </React.StrictMode>
 );

@@ -4,14 +4,18 @@ import { useHistory } from 'react-router';
 import Cliente from './Cliente';
 import './registrar.css'
 import { registrarCliente } from './registrarApi';
+import { useLocation } from 'react-router-dom';
 
 const Registrar: React.FC = () => {
     const history = useHistory();
     const [cliente, setCliente] = useState<Cliente>({});
+    const location = useLocation();
 
     useEffect(() => {
         search();
-    }, [history]);
+    }, [location.pathname]); // Se ejecuta solo una vez cuando cambia la ruta
+    
+
 
     const search = async () => {
         // Aquí podrías implementar lógica si es necesario buscar algo.
@@ -40,14 +44,14 @@ const Registrar: React.FC = () => {
     return (
         
             <IonContent fullscreen>
-                <section>
+                <section className='section-register'>
                     <div className='login'>
                         <IonTitle className='title-registro'>Registrarse</IonTitle>
                         
                         <IonLabel className='title-label'>Nombre</IonLabel>
                         <IonInput
                             className='input'
-                            onIonChange={e => setCliente({ ...cliente, nombre_completo: String(e.detail.value) })}
+                            onIonChange={e => setCliente({ ...cliente, nombre: String(e.detail.value) })}
                             type="text"
                         />
 

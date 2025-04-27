@@ -1,6 +1,6 @@
 import { IonApp, IonRouterOutlet, IonSplitPane, setupIonicReact } from '@ionic/react';
-import { IonReactHashRouter, IonReactRouter } from '@ionic/react-router';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { IonReactHashRouter } from '@ionic/react-router';
+import { Redirect, Route } from 'react-router-dom';
 
 
 
@@ -40,7 +40,6 @@ import Header from './components/Menu';
 import Page from './pages/Page';
 import CarritoVista from './pages/carrito/CarritoVista';
 import Perfil from './pages/Cliente/perfilVista';
-import PullToRefresh from './PullToRefresh';
 
 
 setupIonicReact();
@@ -49,8 +48,7 @@ const App: React.FC = () => {
   return (
     <IonApp>
       <IonReactHashRouter>
-        <PullToRefresh/>
-        <Header />
+      <Header />
         <IonSplitPane contentId="main">
           
           <IonRouterOutlet id="main">

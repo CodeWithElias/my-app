@@ -8,6 +8,10 @@
     padding: 0 15px;
 }
 
+.header-md{
+    height: 70px;
+}
+
 .imagen-usuario{
     width: 40px;
     height: 40px;
@@ -21,10 +25,10 @@
     justify-content: center;
     align-items: center;
     width: 150px;
-    height: 180px;
+    height: 120px;
     position: absolute;
-    top: 19%;
-    right: -4%;
+    top: 120px;
+    right: -60px;
     transform: translate(-50%, -50%);
     background-color: #000;
     border-radius: 10%;
@@ -100,4 +104,23 @@
 
 .list{
     background-color: brown;
+}
+
+
+
+/* PARA MOVILES */
+@media (max-width: 1000px){
+
+    .user-portal-overlay{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        top: 130px;
+        right: -70px;
+        position: absolute;
+        transform: translate(-50%, -50%);
+        background-color: #000;
+        border-radius: 10%;
+    }
+
 }
