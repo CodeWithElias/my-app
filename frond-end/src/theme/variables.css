@@ -1,2 +1,17 @@
 /* For information on how to create your own theme, please see:
 http://ionicframework.com/docs/theming/ */
+/* For information on how to create your own theme, please see:
+http://ionicframework.com/docs/theming/ */
+:root{
+    --primary-color:#464d70;
+    --secundary-color:#757575;
+    --terciary-color:#a1ac88;
+    --bg-color:#ffffff;
+    --dark-color:#1f1f1f;
+
+    --text-font:Poppins;
+    --section-title-font:Poppins-SemiBold;
+    --menu-font:Poppins-bold;
+    --baner-subtitle-font:Poppins-Light;
+    --baner-title:Poppins;
+}

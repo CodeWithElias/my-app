@@ -1,0 +1,40 @@
+.botones {
+    background-color: blue;
+    text-align:center;
+    margin: 10px;
+    width: 100%;
+}
+
+.table {
+    width: 80%;
+    background-color: rgb(31, 30, 30);
+}
+
+.table-item-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+
+.table ion-row {
+    padding: 10px 5px;
+    font-size: 16px;
+}
+
+.table ion-row:first-child {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.table ion-row:nth-child(odd){
+    background: #202020;
+}
+
+.table ion-row:nth-child(even){
+    background: #2d2a2e;
+}
+
+.boton-eliminar-producto{
+    background-color: red;
+}

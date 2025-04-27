@@ -1,0 +1,28 @@
+.seccion{
+    justify-items: center;
+}
+
+.img{
+    position: relative;
+    height: 70%;
+    width: 100%;
+}
+
+.titulo-page{
+    position: absolute;
+    top: 50%;
+    left: 50%; 
+    opacity: 0.8;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: var(--dark-color);
+    background-color: var(--primary-color);
+    font-size:50px;
+    border-radius: 20px;
+}
+
+#title {
+    font-size: 50px;
+    color:chartreuse;
+    text-align: center;
+}

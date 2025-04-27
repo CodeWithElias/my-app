@@ -1,0 +1,103 @@
+/* HEADER */
+.header {   
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--primary-color);
+    height: 8vh;
+    padding: 0 15px;
+}
+
+.imagen-usuario{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #d8ddc4;
+}
+
+/*PORTAL*/
+.user-portal-overlay{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    height: 180px;
+    position: absolute;
+    top: 19%;
+    right: -4%;
+    transform: translate(-50%, -50%);
+    background-color: #000;
+    border-radius: 10%;
+}
+.user-portal-content{
+    width: 130px;
+}
+
+
+
+.title {
+    color: var(--bg-color);
+    font-size: 20px;
+    padding-left: 5px;
+    margin-left: 2px;
+}
+
+.boton{
+    color: var(--terciary-color);
+    border-radius: 15px;
+}
+.boton:hover{
+    color: var(--dark-color);
+    font-size: 15px;
+    border-bottom: solid 2px var(--bg-color);
+}
+.boton.active {
+    background-color: #1565c0; /* Color del botón cuando está activo */
+}
+
+
+
+
+
+
+/*MENU*/
+
+.menu-boton {
+    pointer-events: all;
+    z-index: 999;
+}
+.cursor-pointer {
+    cursor: pointer; /* Cambia el cursor a "puntero" */
+}
+
+/* Estilo para cambiar el fondo de IonItem */
+.custom-item {
+    background-color: crimson;
+    pointer-events: all;
+    z-index: 999;
+}
+
+.custom-item:hover {
+    --background: #590beb; /* Cambio de color al pasar el mouse */
+    color: #000; /* Cambiar color de texto */
+}
+
+/* Estilo para cambiar el diseño de IonLabel */
+.custom-label {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+/* Cambiar el color del menú completo */
+.ion-menu-custom {
+    --ion-background-color: #2c3d41; /* Fondo oscuro */
+}
+
+/* Estilo para cambiar los íconos */
+.custom-icon {
+    color: #aedd04; /* Color personalizado para íconos */
+}
+
+.list{
+    background-color: brown;
+}
