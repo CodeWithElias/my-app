@@ -40,6 +40,7 @@ import Header from './components/Menu';
 import Page from './pages/Page';
 import CarritoVista from './pages/carrito/CarritoVista';
 import Perfil from './pages/Cliente/perfilVista';
+import PullToRefresh from './PullToRefresh';
 
 
 setupIonicReact();
@@ -48,7 +49,8 @@ const App: React.FC = () => {
   return (
     <IonApp>
       <IonReactHashRouter>
-      <Header />
+        <PullToRefresh/>
+        <Header />
         <IonSplitPane contentId="main">
           
           <IonRouterOutlet id="main">

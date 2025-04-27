@@ -19,7 +19,8 @@ import { people, peopleOutline, home, homeOutline, cog, cogOutline,
   bookOutline, book, radio, radioOutline, 
   cash, cashOutline, logoWhatsapp, menu, close,
   cart,
-  cartOutline} from 'ionicons/icons';
+  cartOutline,
+  person} from 'ionicons/icons';
 
 
 import { useMediaQuery } from 'react-responsive'; 
@@ -54,32 +55,12 @@ const menuItems = [
   },
 
   { 
-    label: 'Actividades',
-    path: '/registrarse',
-    iosIcon: cogOutline,
-    mdIcon: cog
-  },
-
-  { 
     label: 'Carrito',
     path: '/carrito',
     iosIcon: cartOutline,
     mdIcon: cart
   },
 
-  { 
-    label: 'Testimonios',
-    path: '/inicio',
-    iosIcon: radioOutline,
-    mdIcon: radio
-  },
-
-  { 
-    label: 'Donaciones',
-    path: '/inicio',
-    iosIcon: cashOutline,
-    mdIcon: cash
-  },
 
   { 
     label: 'Contacto',
@@ -87,13 +68,7 @@ const menuItems = [
     iosIcon: logoWhatsapp,
     mdIcon: logoWhatsapp
   },
-
-  { 
-    label: 'Comunidad',
-    path: '/inicio',
-    iosIcon: peopleOutline,
-    mdIcon: people
-  }
+  
 ];
 
 const Header: React.FC = () => {
@@ -222,11 +197,12 @@ const Header: React.FC = () => {
               )}
 
               <>
-                  <IonImg
-                      src=""
-                      className="imagen-usuario"
+                  <IonButton
+                      fill='clear'
                       onClick= {isPortalOpen == false ? () => setIsPortalOpen(true) : () => setIsPortalOpen(false)}
-                  />
+                  >
+                    <IonIcon icon={person} slot="icon-only"/>
+                  </IonButton>
                   {isPortalOpen && ReactDOM.createPortal(portalContent, document.body)}
               </>
 

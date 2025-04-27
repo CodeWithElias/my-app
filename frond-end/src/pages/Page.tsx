@@ -58,7 +58,7 @@ const Page: React.FC = () => {
       <IonPage>
         <IonContent className='content'>
           
-          <img className='img' src=''></img>
+          <img className='img' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeHCZQ8khfUWtt5SGvr-0vMv7Q2ckyghFOaw&s'></img>
           <h2 className='titulo-page'>E-COMMERCE</h2>
   
           <IonTitle id='title'>Productos</IonTitle>
