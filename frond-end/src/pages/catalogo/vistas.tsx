@@ -1,4 +1,4 @@
-import { IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonLabel, IonMenuButton, IonPage, IonRow, IonTitle, IonToolbar, IonButton, IonAccordionGroup, IonAccordion, IonItem } from '@ionic/react';
+import { IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonLabel, IonMenuButton, IonPage, IonRow, IonTitle, IonToolbar, IonButton, IonAccordionGroup, IonAccordion, IonItem, IonLoading } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import {  useHistory, useParams } from 'react-router';
 import catologo from './catalogo';
@@ -19,8 +19,17 @@ const Vistas: React.FC = () => {
     const {inicioSesion, usuarioLogin} = useAuth();
 
     const history = useHistory();
-
+    const [cargando, setCargando] = useState(true);
+    
     useEffect(() =>{
+        // muestra al sensacion de estar cargando
+        const fetchData = async () => {
+          // Simulamos una consulta a la API
+          await new Promise((res) => setTimeout(res, 1500));
+          setCargando(false);
+        };          
+      fetchData();
+      
         search();
     }, []);
     
@@ -63,6 +72,8 @@ const Vistas: React.FC = () => {
 
 
   return (
+    <>
+    <IonLoading isOpen={cargando} message="Cargando..." spinner="crescent" />
     <IonPage>
       <IonHeader>
         <IonToolbar>
@@ -124,6 +135,7 @@ const Vistas: React.FC = () => {
         
       </IonContent>
     </IonPage>
+    </>
   );
 };
 

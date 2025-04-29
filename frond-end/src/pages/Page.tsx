@@ -1,4 +1,4 @@
-import { IonButton, IonCol, IonContent, IonGrid, IonLabel, IonPage, IonRow, IonTitle } from '@ionic/react';
+import { IonButton, IonCol, IonContent, IonGrid, IonLabel, IonLoading, IonPage, IonRow, IonTitle } from '@ionic/react';
 import { useHistory, useParams } from 'react-router';
 import './Page.css';
 import { useEffect, useState } from 'react';
@@ -7,6 +7,7 @@ import { buscarCatalogo } from './catalogo/catalogoApi';
 import { useAuth } from './Cliente/authContext';
 import { agregarAlCarrito } from './carrito/carritoApi';
 import { toast } from 'react-toastify';
+import Header from '../components/Menu';
 
 const Page: React.FC = () => {
 
@@ -15,11 +16,18 @@ const Page: React.FC = () => {
   const history = useHistory();
 
   const {inicioSesion, usuarioLogin} = useAuth();
-    
+  const [cargando, setCargando] = useState(true);
 
   useEffect(() =>{
-          search();
-  }, [history.location.pathname]);
+      // muestra al sensacion de estar cargando
+      const fetchData = async () => {
+        // Simulamos una consulta a la API
+        await new Promise((res) => setTimeout(res, 1500));
+        setCargando(false);
+    };          
+    fetchData();
+    search();
+  }, []);
       
 
   const search = async () => {
@@ -63,9 +71,13 @@ const Page: React.FC = () => {
   
 
   return (
+    
+    <>
+      <IonLoading isOpen={cargando} message="Cargando..." spinner="crescent" />
       <IonPage>
+      
         <IonContent className='content'>
-          
+
           <img className='img' src='https://i.pinimg.com/736x/fe/e3/c2/fee3c249f7f5ed43cec103cf37f9170c.jpg'></img>
           <h2 className='titulo-page'>E-COMMERCE</h2>
   
@@ -101,6 +113,7 @@ const Page: React.FC = () => {
 
         </IonContent>
       </IonPage>
+    </>
     );
 };
 

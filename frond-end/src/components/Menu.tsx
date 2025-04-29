@@ -17,7 +17,7 @@ import {
 
 import { people, peopleOutline, home, homeOutline, 
   bookOutline, book, 
-  logoWhatsapp, menu, close,
+  menu, close,
   cart,
   cartOutline,
   person} from 'ionicons/icons';
@@ -28,6 +28,7 @@ import { useHistory } from 'react-router-dom';
 import '../components/Menu.css';
 import ReactDOM from 'react-dom';
 import { useAuth } from '../pages/Cliente/authContext';
+
 
 
 const menuItems = [
@@ -60,14 +61,6 @@ const menuItems = [
     mdIcon: cart
   },
 
-
-  { 
-    label: 'Contacto',
-    path: '/inicio',
-    iosIcon: logoWhatsapp,
-    mdIcon: logoWhatsapp
-  },
-  
 ];
 
 const Header: React.FC = () => {
@@ -78,12 +71,12 @@ const Header: React.FC = () => {
 
 
   const history = useHistory();
-  const isMobile = useMediaQuery({ query: '(max-width: 800px)' });
+  const isMobile = useMediaQuery({ query: '(max-width: 1000px)' });
   const {inicioSesion} = useAuth()
 
   useEffect(() =>{
 
-  }, [history.location.pathname]);
+  }, []);
 
 
   const handleButtonClick = (index: null | number) => {   
@@ -97,28 +90,34 @@ const Header: React.FC = () => {
     window.location.reload();
   };
 
-
+  
       const [isPortalOpen, setIsPortalOpen] = useState(false);
   
       const portalContent = isPortalOpen && (
           <div className="user-portal-overlay">
               <div  className="user-portal-content" onClick={(e) => e.stopPropagation()}>
 
-              <IonItem button onClick={() => inicioSesion == true ? history.push("/perfil") : (history.push("/login")) }>
+              <IonItem button onClick={() => {
+                                        setIsPortalOpen(false); // Cierra el portal
+                                        inicioSesion ? history.push("/perfil") : history.push("/login");
+                                      }}>
                 <IonLabel>{inicioSesion ? "Perfil" : "Inicia Sesión"}</IonLabel>
               </IonItem>
 
-              <IonItem button onClick={() => inicioSesion == true ? cerrarSesion() : (history.push("/registrarse"))}>
+              <IonItem button onClick={() => {
+                                        setIsPortalOpen(false); // Cierra el portal
+                                        inicioSesion ? cerrarSesion() : history.push("/registrarse");
+                                      }}>
                 <IonLabel>{inicioSesion ? "Cerrar Sesión" : "Registrarse"}</IonLabel>
               </IonItem>
-
+              
               </div>
           </div>
       );  
 
-
   return (
     <>
+    {!isMobile}(
       {/* MENÚ LATERAL PARA MÓVILES */}
       <IonMenu
         side="end"
@@ -159,9 +158,10 @@ const Header: React.FC = () => {
             </IonList>
         </IonContent>
       </IonMenu>
-
+    ):(
       {/* HEADER */}
       <IonHeader>
+        
         <IonToolbar>
           <div className='header'>
             
@@ -182,7 +182,7 @@ const Header: React.FC = () => {
                       }
                     }
                   >
-                    {activeButton === index && item.label} {/* Mostrar texto solo si está activo */}
+                    {item.label} {/* Mostrar texto solo si está activo */}
                     <IonIcon
                       aria-hidden="true"
                       slot="start"
@@ -208,6 +208,7 @@ const Header: React.FC = () => {
           </div>
         </IonToolbar>
       </IonHeader>
+    );
     </>
   );
 };

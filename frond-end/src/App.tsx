@@ -1,8 +1,6 @@
 import { IonApp, IonRouterOutlet, IonSplitPane, setupIonicReact } from '@ionic/react';
-import { IonReactHashRouter } from '@ionic/react-router';
 import { Redirect, Route } from 'react-router-dom';
-
-
+import { IonReactRouter } from '@ionic/react-router';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -48,10 +46,11 @@ setupIonicReact();
 const App: React.FC = () => {
   return (
     <IonApp>
-      <IonReactHashRouter>
-      <Header />
-        <IonSplitPane contentId="main">
-          
+      <IonReactRouter>
+
+        <IonSplitPane contentId="main" when="max-width:1000px">
+        <Header />
+
           <IonRouterOutlet id="main">
                       
               <Route exact path="/">
@@ -88,7 +87,7 @@ const App: React.FC = () => {
 
           </IonRouterOutlet>
         </IonSplitPane>
-      </IonReactHashRouter>
+      </IonReactRouter>
     </IonApp>
   )
 };

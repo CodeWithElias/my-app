@@ -1,19 +1,26 @@
-import { IonContent, IonInput, IonInputPasswordToggle, IonTitle, IonButton, IonLabel } from '@ionic/react';
+import { IonContent, IonInput, IonInputPasswordToggle, IonTitle, IonButton, IonLabel, IonPage, IonHeader, IonToolbar, IonLoading } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import Cliente from './Cliente';
 import './registrar.css'
 import { registrarCliente } from './registrarApi';
-import { useLocation } from 'react-router-dom';
+
 
 const Registrar: React.FC = () => {
     const history = useHistory();
     const [cliente, setCliente] = useState<Cliente>({});
-    const location = useLocation();
+    const [cargando, setCargando] = useState(true);
 
     useEffect(() => {
+        // muestra al sensacion de estar cargando
+        const fetchData = async () => {
+            // Simulamos una consulta a la API
+            await new Promise((res) => setTimeout(res, 1500));
+            setCargando(false);
+        };          
+        fetchData();
         search();
-    }, [location.pathname]); // Se ejecuta solo una vez cuando cambia la ruta
+    }, [history.location.pathname]); // Se ejecuta solo una vez cuando cambia la ruta
     
 
 
@@ -42,54 +49,64 @@ const Registrar: React.FC = () => {
     };
 
     return (
-        
-            <IonContent fullscreen>
-                <section className='section-register'>
-                    <div className='login'>
-                        <IonTitle className='title-registro'>Registrarse</IonTitle>
-                        
-                        <IonLabel className='title-label'>Nombre</IonLabel>
-                        <IonInput
-                            className='input'
-                            onIonChange={e => setCliente({ ...cliente, nombre: String(e.detail.value) })}
-                            type="text"
-                        />
+            <>
+            <IonLoading isOpen={cargando} message="Cargando..." spinner="crescent" />
+            <IonPage>
+            <IonHeader>
+                <IonToolbar>
+                <IonTitle>Registro</IonTitle>
+                </IonToolbar>
+            </IonHeader>
+                  
+                <IonContent fullscreen>
+                    <section className='section-register'>
+                        <div className='login'>
+                            <IonTitle className='title-registro'>Registrarse</IonTitle>
+                            
+                            <IonLabel className='title-label'>Nombre</IonLabel>
+                            <IonInput
+                                className='input'
+                                onIonChange={e => setCliente({ ...cliente, nombre: String(e.detail.value) })}
+                                type="text"
+                            />
 
-                        <IonLabel className='title-label'>Correo Electronico</IonLabel>
-                        <IonInput
-                            className='input'
-                            onIonChange={e => setCliente({ ...cliente, email: String(e.detail.value) })}
-                            type="email"
-                        />
+                            <IonLabel className='title-label'>Correo Electronico</IonLabel>
+                            <IonInput
+                                className='input'
+                                onIonChange={e => setCliente({ ...cliente, email: String(e.detail.value) })}
+                                type="email"
+                            />
 
-                        <IonLabel className='title-label'>Telefono</IonLabel>
-                        <IonInput
-                            className='input'
-                            onIonChange={e => setCliente({ ...cliente, telefono: String(e.detail.value) })}
-                            type="text"
-                        />
+                            <IonLabel className='title-label'>Telefono</IonLabel>
+                            <IonInput
+                                className='input'
+                                onIonChange={e => setCliente({ ...cliente, telefono: String(e.detail.value) })}
+                                type="text"
+                            />
 
-                        <IonLabel className='title-label'>Direccion</IonLabel>
-                        <IonInput
-                            className='input'
-                            onIonChange={e => setCliente({ ...cliente, direccion: String(e.detail.value) })}
-                            type="text"
-                        />
+                            <IonLabel className='title-label'>Direccion</IonLabel>
+                            <IonInput
+                                className='input'
+                                onIonChange={e => setCliente({ ...cliente, direccion: String(e.detail.value) })}
+                                type="text"
+                            />
 
-                        <IonLabel className='title-label'>Contraseña</IonLabel>
-                        <IonInput
-                            className='input'
-                            onIonChange={e => setCliente({ ...cliente, password: String(e.detail.value) })}
-                            type="password"
-                        >
-                            <IonInputPasswordToggle slot="end"></IonInputPasswordToggle>
-                        </IonInput>
+                            <IonLabel className='title-label'>Contraseña</IonLabel>
+                            <IonInput
+                                className='input'
+                                onIonChange={e => setCliente({ ...cliente, password: String(e.detail.value) })}
+                                type="password"
+                            >
+                                <IonInputPasswordToggle slot="end"></IonInputPasswordToggle>
+                            </IonInput>
 
-                        <IonButton onClick={() => registrar()}>Registrarse</IonButton>
-                    </div>
-                </section>
-            </IonContent>
-
+                            <IonButton onClick={() => registrar()}>Registrarse</IonButton>
+                        </div>
+                    </section>
+                </IonContent>
+            </IonPage>
+            </>
+            
     );
 };
 

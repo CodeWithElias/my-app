@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonCard, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonLabel, IonMenuButton, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonCard, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonLabel, IonLoading, IonMenuButton, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import React from 'react';
@@ -12,12 +12,20 @@ const CarritoPage: React.FC = () => {
   
   const { name } = useParams<{ name: string; }>();
   const [producto, setProducto] = useState<Producto[]>([]);
-
   const {usuarioLogin} = useAuth();
+  const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
+
+        // muestra al sensacion de estar cargando
+        const fetchData = async () => {
+          // Simulamos una consulta a la API
+          await new Promise((res) => setTimeout(res, 1500));
+          setCargando(false);
+      };          
+      fetchData();
     search();
-  }, []);
+  },);
 
   const search = async () => {
       if (usuarioLogin && usuarioLogin.id) {
@@ -65,6 +73,8 @@ const CarritoPage: React.FC = () => {
 }
 
   return (
+    <>
+    <IonLoading isOpen={cargando} message="Cargando..." spinner="crescent" />
     <IonPage>
       <IonHeader>
         <IonToolbar>
@@ -117,6 +127,7 @@ const CarritoPage: React.FC = () => {
 
       </IonContent>
     </IonPage>
+    </>
   );
 };
 

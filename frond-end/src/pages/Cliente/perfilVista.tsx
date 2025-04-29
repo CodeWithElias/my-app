@@ -1,6 +1,6 @@
-import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonContent, IonHeader, IonItem, IonLabel, IonMenuButton, IonPage, IonTitle, IonToolbar, IonGrid } from '@ionic/react';
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonContent, IonHeader, IonItem, IonLabel, IonMenuButton, IonPage, IonTitle, IonToolbar, IonGrid, IonLoading } from '@ionic/react';
 import './perfilStyle.css';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { useAuth } from './authContext';
 
@@ -9,8 +9,15 @@ const Perfil: React.FC = () => {
     const { name } = useParams<{ name: string }>();
 
     const {usuarioLogin} = useAuth();
-
+    const [cargando, setCargando] = useState(true);
     useEffect(() => {
+        // muestra al sensacion de estar cargando
+        const fetchData = async () => {
+            // Simulamos una consulta a la API
+            await new Promise((res) => setTimeout(res, 1500));
+            setCargando(false);
+        };          
+        fetchData();
         search();
     }, [history.location.pathname]);
 
@@ -25,6 +32,8 @@ const Perfil: React.FC = () => {
     
     
     return (
+        <>
+        <IonLoading isOpen={cargando} message="Cargando..." spinner="crescent" />
         <IonPage>
             <IonHeader>
                 <IonToolbar>
@@ -73,6 +82,7 @@ const Perfil: React.FC = () => {
 
             </IonContent>
         </IonPage>
+        </>
     );
 };
 
