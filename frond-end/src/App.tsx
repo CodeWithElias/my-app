@@ -40,6 +40,7 @@ import Header from './components/Menu';
 import Page from './pages/Page';
 import CarritoVista from './pages/carrito/CarritoVista';
 import Perfil from './pages/Cliente/perfilVista';
+import Nosotros from './pages/nosotros';
 
 
 setupIonicReact();
@@ -56,21 +57,31 @@ const App: React.FC = () => {
               <Route exact path="/">
                 <Redirect to="/inicio" />
               </Route>
+
               <Route exact path="/login">
                 <Login />
               </Route>
+              
               <Route exact path="/inicio">
                 <Page />
               </Route>
+
+              <Route exact path="/nosotros">
+                <Nosotros />
+              </Route>
+
               <Route exact path="/catalogo">
                 <Vistas />
               </Route>
+
               <Route exact path="/registrarse">
                 <Registrar />
               </Route>
+
               <Route exact path="/carrito">
                 <CarritoVista />
               </Route>
+
               <Route exact path="/perfil">
                 <Perfil />
               </Route>

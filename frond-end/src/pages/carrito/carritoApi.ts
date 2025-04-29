@@ -113,3 +113,35 @@ export async function obtenerCarrito(usuario_id: number) {
       throw error;
     }
   }
+
+  export async function pagarPorLaCompra(id: number){
+    const url = 'http://127.0.0.1:8000/api/payment/generar_pago_paypal/';
+    try {
+      const respuesta = await fetch (url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(id),
+      });
+  
+      console.log("Respuesta cruda:", respuesta);
+      if (!respuesta.ok) {
+        console.error("Error HTTP:", respuesta.status);
+        throw new Error(`Error HTTP: ${respuesta.status}`);
+      }
+  
+      const data = await respuesta.json();
+      console.log("Datos JSON recibidos:", data);
+      return data;
+    } catch (error) {
+
+      if (error instanceof Error) {
+        console.error("Error en la petición:", error.message);
+      } else {
+        console.error("Error en la petición:", error);
+      }
+      
+      throw error;
+    }
+  }

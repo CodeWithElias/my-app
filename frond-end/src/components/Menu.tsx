@@ -47,8 +47,8 @@ const menuItems = [
   },
 
   { 
-    label: 'Acerca de Nosotros',
-    path: '/login',
+    label: 'Sobre Nosotros',
+    path: '/nosotros',
     iosIcon: peopleOutline,
     mdIcon: people
   },

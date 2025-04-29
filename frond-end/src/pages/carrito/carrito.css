@@ -1,3 +1,8 @@
+#table-carito{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
 
 .table-car {
     width: 75%;
@@ -36,7 +41,22 @@
     background-color: red;
 }
 
+.section-pago{
+    width: 60%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
 
+.pagar-paypal{
+    background-color: rgb(8, 161, 250);
+    color:black;
+    font-size: 15px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    border-radius: 6px;
+    width: 100px;
+}
 
 /* PARA MOVILES */
 @media (max-height: 1000px){

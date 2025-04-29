@@ -1,4 +1,4 @@
-import { IonButton, IonCol, IonContent, IonFooter, IonGrid, IonLabel, IonPage, IonRow, IonTitle } from '@ionic/react';
+import { IonButton, IonCol, IonContent, IonGrid, IonLabel, IonPage, IonRow, IonTitle } from '@ionic/react';
 import { useHistory, useParams } from 'react-router';
 import './Page.css';
 import { useEffect, useState } from 'react';
@@ -6,6 +6,7 @@ import catologo from './catalogo/catalogo';
 import { buscarCatalogo } from './catalogo/catalogoApi';
 import { useAuth } from './Cliente/authContext';
 import { agregarAlCarrito } from './carrito/carritoApi';
+import { toast } from 'react-toastify';
 
 const Page: React.FC = () => {
 
@@ -13,11 +14,8 @@ const Page: React.FC = () => {
   const [catalogo, setCatalogo] = useState<catologo[]>([]);
   const history = useHistory();
 
-
-  
-  
   const {inicioSesion, usuarioLogin} = useAuth();
-
+    
 
   useEffect(() =>{
           search();
@@ -48,9 +46,19 @@ const Page: React.FC = () => {
     
       const response = await agregarAlCarrito(nuevoCarrito);
       console.log("Respuesta de la API:", response);
-
-    }
-    
+      if (response) {
+      // Lógica para agregar el producto
+        toast.success("Producto agregado al carrito 🛒", {
+          position: "bottom-center",
+          autoClose: 3000, // Se cierra en 3 segundos
+        });
+      }else{
+        toast.success("Error al agregar al 🛒", {
+          position: "bottom-center",
+          autoClose: 3000, // Se cierra en 3 segundos
+        });
+      }
+    };
   };
   
 

@@ -88,7 +88,6 @@ const Login: React.FC = () => {
                             <IonInputPasswordToggle slot="end"></IonInputPasswordToggle>
                         </IonInput>
 
-                        <a href="#">Olvidé mi contraseña</a>
                         <div className='botones'>
                             <IonButton onClick={() => login()}>Iniciar</IonButton>
                             <IonButton onClick={() => history.push("/registrarse")}>Crear Cuenta</IonButton>

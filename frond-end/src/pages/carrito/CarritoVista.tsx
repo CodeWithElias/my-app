@@ -1,11 +1,11 @@
-import { IonButton, IonButtons, IonCard, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonMenuButton, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonCard, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonLabel, IonMenuButton, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import React from 'react';
-import { eliminarProductoDelCarrito, obtenerCarrito } from './carritoApi';
+import { eliminarProductoDelCarrito, obtenerCarrito, pagarPorLaCompra } from './carritoApi';
 import Producto from '../producto/Producto';
 import { useAuth } from '../Cliente/authContext';
-import { trash } from 'ionicons/icons';
+import { logoPaypal, trash } from 'ionicons/icons';
 import './carrito.css';
 
 const CarritoPage: React.FC = () => {
@@ -17,10 +17,9 @@ const CarritoPage: React.FC = () => {
 
   useEffect(() => {
     search();
-  }, );
+  }, []);
 
   const search = async () => {
-    try {
       if (usuarioLogin && usuarioLogin.id) {
         const result = await obtenerCarrito(Number(usuarioLogin.id));
         console.log("Contenido recibido:", result);
@@ -31,15 +30,6 @@ const CarritoPage: React.FC = () => {
       } else {
         console.error("Error: No se pudo obtener la lista de productos del carrito.");
       }
-    } catch (error) {
-
-      if (error instanceof Error) {
-        console.error("Error en la petición:", error.message);
-      } else {
-        console.error("Error en la petición:", error);
-      }
-      
-    }
   };
 
 
@@ -61,6 +51,19 @@ const CarritoPage: React.FC = () => {
     }
   }
 
+
+  const  pagar = async (pago_id: number) => {
+    try{
+      await pagarPorLaCompra(pago_id);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error en la petición:", error.message);
+      } else {
+        console.error("Error en la petición:", error);
+      }
+  }
+}
+
   return (
     <IonPage>
       <IonHeader>
@@ -73,7 +76,7 @@ const CarritoPage: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen>
         
-        <IonCard>                
+        <IonCard id="table-carito">                
           
           <IonGrid className="table-car">
               <IonRow>
@@ -101,9 +104,15 @@ const CarritoPage: React.FC = () => {
 
                       </IonCol>
                   </IonRow>
-              ))}
-              
+              ))}   
           </IonGrid>
+          <div className='section-pago'> 
+            <IonLabel>Total: </IonLabel>
+            <IonButton className="pagar-paypal" fill="clear" onClick={() => (pagar(1))}>
+            <IonIcon icon={logoPaypal} slot="icon-only"></IonIcon>
+                PayPal
+            </IonButton>
+          </div>
       </IonCard>
 
       </IonContent>

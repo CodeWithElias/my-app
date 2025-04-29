@@ -5,6 +5,9 @@ import { IonApp } from '@ionic/react';
 import { AuthProvider } from './pages/Cliente/authContext';
 import { IonReactRouter } from '@ionic/react-router';
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 // Obtener el contenedor de la app
 const container = document.getElementById('root');
 
@@ -15,6 +18,7 @@ root.render(
     <IonReactRouter>
       <AuthProvider>
         <IonApp>
+          <ToastContainer />
           <App />
         </IonApp>
       </AuthProvider>
