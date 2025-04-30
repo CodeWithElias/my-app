@@ -72,7 +72,9 @@ const Header: React.FC = () => {
 
   const history = useHistory();
   const isMobile = useMediaQuery({ query: '(max-width: 1000px)' });
-  const {inicioSesion} = useAuth()
+  const {inicioSesion, setInicioSesion} = useAuth();
+  const {setUsuarioLogin} = useAuth();
+
 
   useEffect(() =>{
 
@@ -84,10 +86,11 @@ const Header: React.FC = () => {
   };
   
   const cerrarSesion = () => {
-    localStorage.clear(); // Vacía completamente el localStorage
+    setUsuarioLogin(null);
+    setInicioSesion(false);
     console.log("localStorage ha sido vaciado.");
     history.push("/inicio")
-    window.location.reload();
+    
   };
 
   

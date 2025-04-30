@@ -39,6 +39,7 @@ import Page from './pages/Page';
 import CarritoVista from './pages/carrito/CarritoVista';
 import Perfil from './pages/Cliente/perfilVista';
 import Nosotros from './pages/nosotros';
+import EditarUsuario from './pages/Cliente/editarUsuario';
 
 
 setupIonicReact();
@@ -84,6 +85,11 @@ const App: React.FC = () => {
               <Route exact path="/perfil">
                 <Perfil />
               </Route>
+
+              <Route exact path="/editar_usuario">
+                <EditarUsuario />
+              </Route>
+              
 
           </IonRouterOutlet>
         </IonSplitPane>

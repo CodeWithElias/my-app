@@ -1,13 +1,14 @@
-import { IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonLabel, IonMenuButton, IonPage, IonRow, IonTitle, IonToolbar, IonButton, IonLoading } from '@ionic/react';
+import { IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonLabel, IonMenuButton, IonPage, IonRow, IonTitle, IonToolbar, IonButton, IonLoading, IonInput, IonItem, IonModal, IonSelect, IonSelectOption, IonIcon } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import {  useHistory, useParams } from 'react-router';
 import catologo from './catalogo';
 import { buscarCatalogo, mostrarProductoPorCategoria } from './catalogoApi';
 import { useAuth } from '../Cliente/authContext';
-import { agregarAlCarrito } from '../carrito/carritoApi';
+import { agregarAlCarrito, comprarProductoAhora, confirmarPago, pagoPaypal } from '../carrito/carritoApi';
 import Carrito from '../carrito/carrito';
 import { toast } from 'react-toastify';
 import  './busquedaVoz.css';
+import { logoPaypal } from 'ionicons/icons';
 const Vistas: React.FC = () => {
 
 
@@ -43,6 +44,10 @@ const Vistas: React.FC = () => {
       "cámaras": 8
     };
     
+    const [mostrarModal, setMostrarModal] = useState(false);
+    const [direccion, setDireccion] = useState("");
+    const [tipoEntrega, setTipoEntrega] = useState("estandar");
+    const [IdProducto, setIdProducto] = useState("")
 
     useEffect(() =>{
       search();
@@ -100,7 +105,7 @@ const Vistas: React.FC = () => {
             autoClose: 3000, // Se cierra en 3 segundos
           });
         }else{
-          toast.success("Error al agregar al 🛒", {
+          toast.error("Error al agregar al 🛒", {
             position: "bottom-center",
             autoClose: 3000, // Se cierra en 3 segundos
           });
@@ -109,6 +114,46 @@ const Vistas: React.FC = () => {
     };
 
 
+    const comprarAhora = async (id_prod: number) => {
+      if (usuarioLogin && usuarioLogin.id) {
+        const nuevoCarrito = {
+          usuario_id: Number(usuarioLogin.id),
+          producto_id: id_prod,
+          cantidad: 1,
+          metodo_pago_id: 1,
+          direccion_envio: direccion,
+          tipo_entrega: tipoEntrega
+        };
+      
+        setCarrito([nuevoCarrito]);
+        const response = await comprarProductoAhora(nuevoCarrito);
+        console.log("Respuesta de la API:", response);
+
+        toast.success("Gracias por su compra", {
+          position: "bottom-center",
+          autoClose: 3000, // Se cierra en 3 segundos
+        });
+        if (response){
+          const res = await confirmarPago(response.pago_id);
+
+          if (res) {
+            const respay = await pagoPaypal(response.pago_id);
+
+            setMostrarModal(false);
+            window.open(respay.approval_url, '_blank');
+
+          }
+        }else {
+          toast.error("La compra tuvo un error", {
+            position: "bottom-center",
+            autoClose: 3000, // Se cierra en 3 segundos
+          });
+        }
+        
+      }
+    }
+
+    // busqueda por voz
     const iniciarBusquedaPorVoz = () => {
       if (!recognition) {
         alert("Tu navegador no soporta reconocimiento de voz.");
@@ -206,22 +251,75 @@ const Vistas: React.FC = () => {
                       ></img>
                       <IonLabel className='descripcion-label'>{cata.descripcion}</IonLabel>
                       <IonLabel className='precio-label'>{cata.precio+' bs'}</IonLabel>
-                      <IonLabel>{cata.stock}</IonLabel>
-                      <IonButton id="boton-agregar" onClick={() => {
-                                        if (inicioSesion) {
-                                          if (cata.id !== undefined) {
-                                            agregarCarrito(Number(cata.id));
+                      <IonLabel className='label-stock'>{"stock : "+cata.stock}</IonLabel>
+                      <div id="botones">
+                        <IonButton  className="botom-comprar" id="boton-comprar" onClick={() => {
+                                          if (inicioSesion) {
+                                            if (cata.id !== undefined) {
+                                              agregarCarrito(Number(cata.id));
+                                            }
+                                          } else {
+                                            history.push("/login");
                                           }
-                                        } else {
-                                          history.push("/login");
-                                        }
-                                      }}
-                      >agregar al carrito</IonButton>
+                                        }}
+                        >agregar al carrito</IonButton>
+                        <IonButton className="botom-comprar" id="boton-agregar" onClick={() => {
+                                            if (inicioSesion) {
+                                              if (cata.id !== undefined) {
+                                                setMostrarModal(true);
+                                                setIdProducto(cata.id)
+                                              }
+                                            } else {
+                                              history.push("/login");
+                                            }
+                                          }}
+                          >Comprar Ahora</IonButton>
+                        </div>
+                    
                   </IonCol>
               ))}
               </IonRow>  
           </IonGrid>      
         
+
+
+
+          <IonModal isOpen={mostrarModal} onDidDismiss={() => setMostrarModal(false)}>
+            <IonHeader>
+              <IonToolbar>
+                <IonTitle>Datos De La Compra</IonTitle>
+                <IonButtons slot="end">
+                  <IonButton onClick={() => setMostrarModal(false)}>Cerrar</IonButton>
+                </IonButtons>
+              </IonToolbar>
+            </IonHeader>
+            <IonContent className="ion-padding">
+              <IonItem>
+                <IonLabel position="stacked">Dirección de envío</IonLabel>
+                <IonInput
+                  value={direccion}
+                  placeholder="Ej: Calle 12, Warnes"
+                  onIonChange={(e) => setDireccion(e.detail.value!)}
+                />
+              </IonItem>
+
+              <IonItem>
+                <IonLabel position="stacked">Tipo de entrega</IonLabel>
+                <IonSelect value={tipoEntrega} onIonChange={(e) => setTipoEntrega(e.detail.value)}>
+                  <IonSelectOption value="estandar">Estándar</IonSelectOption>
+                  <IonSelectOption value="express">Express</IonSelectOption>
+                </IonSelect>
+              </IonItem>
+
+              <div className='section-pago'> 
+                <IonButton className="pagar-paypal" fill="clear" onClick={() => (comprarAhora(Number(IdProducto)))}>
+                <IonIcon icon={logoPaypal} slot="icon-only"></IonIcon>
+                    PayPal
+                </IonButton>
+              </div>
+            </IonContent>
+          </IonModal>
+
       </IonContent>
     </IonPage>
     </>

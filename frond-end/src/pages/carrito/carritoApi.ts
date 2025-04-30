@@ -1,5 +1,6 @@
 import carrito from "./carrito";
 
+
 export async function agregarAlCarrito(caro: carrito){
 
     const url = import.meta.env.VITE_API_URL;
@@ -117,15 +118,23 @@ export async function obtenerCarrito(usuario_id: number) {
     }
   }
 
-  export async function pagarPorLaCompra(id: number){
+  export async function comprarCarrito(caro: any){
     const url = import.meta.env.VITE_API_URL;
+
+    const body = {
+      usuario_id: caro.usuario_id,
+      metodo_pago_id: caro.metodo_pago_id,
+      direccion_envio: caro.direccion_envio,
+      tipo_entrega: caro.tipo_entrega,
+    };
+    
     try {
-      const respuesta = await fetch (url+"/api/payment/generar_pago_paypal/", {
+      const respuesta = await fetch (url+"/api/orders/compra_carrito/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(id),
+        body: JSON.stringify(body),
       });
   
       console.log("Respuesta cruda:", respuesta);
@@ -136,6 +145,123 @@ export async function obtenerCarrito(usuario_id: number) {
   
       const data = await respuesta.json();
       console.log("Datos JSON recibidos:", data);
+      return data;
+    } catch (error) {
+
+      if (error instanceof Error) {
+        console.error("Error en la petición:", error.message);
+      } else {
+        console.error("Error en la petición:", error);
+      }
+      
+      throw error;
+    }
+  }
+
+  export async function comprarProductoAhora(caro: any){
+    const url = import.meta.env.VITE_API_URL;
+
+    //console.log("API URL:", url); // Agregar log para verificar la URL
+    //const url = process.env.REACT_APP_API + 'add-to-cart';
+    const body = {
+      usuario_id: caro.usuario_id,
+      producto_id: caro.producto_id,
+      cantidad: caro.cantidad,
+      metodo_pago_id: caro.metodo_pago_id,
+      direccion_envio: caro.direccion_envio,
+      tipo_entrega: caro.tipo_entrega,
+    };
+    
+    if (!body.usuario_id || !body.producto_id || !body.cantidad) {
+      throw new Error("El cuerpo de la solicitud no tiene todos los campos necesarios.");
+    }
+    
+    try {
+      let respuesta = await fetch(url+ "/api/orders/compra-directa/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+    
+      if (!respuesta.ok) {
+        throw new Error(`Error en la API: ${respuesta.status} - ${respuesta.statusText}`);
+      }
+    
+      const data = await respuesta.json();
+      console.log("Datos recibidos de la API:", data);
+      return data;
+    } catch (error) {
+
+      if (error instanceof Error) {
+        console.error("Error en la petición:", error.message);
+      } else {
+        console.error("Error en la petición:", error);
+      }
+      
+      throw error;
+    }
+  }
+
+
+  export async function confirmarPago(id: number){
+    const url = import.meta.env.VITE_API_URL;
+
+    const body ={
+      pago_id: id
+    }
+
+    try {
+      let respuesta = await fetch(url+ "/api/orders/confirmar-pago/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+    
+      if (!respuesta.ok) {
+        throw new Error(`Error en la API: ${respuesta.status} - ${respuesta.statusText}`);
+      }
+    
+      const data = await respuesta.json();
+      console.log("Datos recibidos de la API:", data);
+      return data;
+    } catch (error) {
+
+      if (error instanceof Error) {
+        console.error("Error en la petición:", error.message);
+      } else {
+        console.error("Error en la petición:", error);
+      }
+      
+      throw error;
+    }
+  }
+
+  export async function pagoPaypal(id: number){
+    const url = import.meta.env.VITE_API_URL;
+    const body ={
+      pago_id: id
+    }
+
+
+    try {
+      let respuesta = await fetch(url+ "/api/payment/generar_pago_paypal/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+    
+      if (!respuesta.ok) {
+        throw new Error(`Error en la API: ${respuesta.status} - ${respuesta.statusText}`);
+      }
+    
+      const data = await respuesta.json();
+      console.log("Datos recibidos de la API:", data);
       return data;
     } catch (error) {
 

@@ -8,7 +8,8 @@ const Perfil: React.FC = () => {
     const history = useHistory();
     const { name } = useParams<{ name: string }>();
 
-    const {usuarioLogin} = useAuth();
+    const {usuarioLogin,setUsuarioLogin} = useAuth();
+    const {setInicioSesion} = useAuth();
     const [cargando, setCargando] = useState(true);
 
     
@@ -30,6 +31,12 @@ const Perfil: React.FC = () => {
     };
 
 
+    const cerrarSesion = () => {
+        setUsuarioLogin(null);
+        setInicioSesion(false);
+        history.push("/inicio");
+        
+    };
     
     
     
@@ -69,10 +76,10 @@ const Perfil: React.FC = () => {
                         </div>
 
                         <div className="perfil-buttons">
-                            <IonButton expand="block" color="primary" >
+                            <IonButton expand="block" color="primary" onClick={() => history.push("/editar_usuario")}>
                             Editar Perfil
                             </IonButton>
-                            <IonButton expand="block" color="danger" >
+                            <IonButton expand="block" color="danger"  onClick={() => cerrarSesion()}>
                             Cerrar Sesión
                             </IonButton>
                         </div>
