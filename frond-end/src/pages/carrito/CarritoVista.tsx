@@ -14,7 +14,7 @@ const CarritoPage: React.FC = () => {
   const { name } = useParams<{ name: string; }>();
   const [producto, setProducto] = useState<Producto[]>([]);
   const {usuarioLogin} = useAuth();
-  const [cargando] = useState(false);
+  const [cargando, setCargando] = useState(true);
 
 
   const [mostrarModal, setMostrarModal] = useState(false);
@@ -36,6 +36,7 @@ const CarritoPage: React.FC = () => {
       
         if (result && Array.isArray(result.productos)) {
           setProducto(result.productos);
+          setCargando(false);
         }
       } else {
         console.error("Error: No se pudo obtener la lista de productos del carrito.");
@@ -157,7 +158,18 @@ const pagar = async () => {
               ))}   
           </IonGrid>
           <div className='section-pago'> 
-            <IonLabel>Total: </IonLabel>
+            
+          <IonButton
+                  className="pagar-paypal"
+                  fill="clear"
+                  onClick={() => {
+                    search();
+                  }}
+                >
+                  
+                  Actualizar Carrito
+            </IonButton>
+
             <IonButton
                   className="pagar-paypal"
                   fill="clear"

@@ -86,7 +86,6 @@ const Perfil: React.FC = () => {
                         </IonCardContent>
                     </IonCard>
 
-                    <IonGrid>eliaspuma</IonGrid>
                 </section>
 
             </IonContent>
