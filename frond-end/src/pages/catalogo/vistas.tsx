@@ -1,4 +1,4 @@
-import { IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonLabel, IonMenuButton, IonPage, IonRow, IonTitle, IonToolbar, IonButton, IonAccordionGroup, IonAccordion, IonItem, IonLoading } from '@ionic/react';
+import { IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonLabel, IonMenuButton, IonPage, IonRow, IonTitle, IonToolbar, IonButton, IonLoading } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import {  useHistory, useParams } from 'react-router';
 import catologo from './catalogo';
@@ -6,7 +6,8 @@ import { buscarCatalogo, mostrarProductoPorCategoria } from './catalogoApi';
 import { useAuth } from '../Cliente/authContext';
 import { agregarAlCarrito } from '../carrito/carritoApi';
 import Carrito from '../carrito/carrito';
-
+import { toast } from 'react-toastify';
+import  './busquedaVoz.css';
 const Vistas: React.FC = () => {
 
 
@@ -21,18 +22,41 @@ const Vistas: React.FC = () => {
     const history = useHistory();
     const [cargando, setCargando] = useState(true);
     
-    useEffect(() =>{
-        // muestra al sensacion de estar cargando
-        const fetchData = async () => {
-          // Simulamos una consulta a la API
-          await new Promise((res) => setTimeout(res, 1500));
-          setCargando(false);
-        };          
-      fetchData();
-      
-        search();
-    }, []);
+    const [busqueda, setBusqueda] = useState('');
+
+    const [catalogoFiltrado, setCatalogoFiltrado] = useState<catologo[]>([]);
+
+    // para busqueda por voz
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const recognition = SpeechRecognition ? new SpeechRecognition() : null;
+
+    const categoriasMap: { [clave: string]: number } = {
+      "celulares": 1,
+      "teléfonos": 1,
+      "computadoras": 2,
+      "laptops": 2,
+      "tabletas": 3,
+      "accesorios": 4,
+      "televisores": 5,
+      "electrodomésticos": 6,
+      "audio": 7,
+      "cámaras": 8
+    };
     
+
+    useEffect(() =>{
+      search();
+    },[] );
+    
+
+    useEffect(() => {
+      const resultados = catalogo.filter((producto) =>
+        producto.nombre?.toLowerCase().includes(busqueda.toLowerCase())
+      );
+      setCatalogoFiltrado(resultados);
+    }, [busqueda, catalogo]);
+    
+
     const search = async () => {
         let result = await buscarCatalogo();
             
@@ -41,6 +65,7 @@ const Vistas: React.FC = () => {
           return;
         }
       setCatalogo(result);
+      setCargando(false);
     }
 
 
@@ -67,10 +92,80 @@ const Vistas: React.FC = () => {
         setCarrito([nuevoCarrito]);
         const response = await agregarAlCarrito(nuevoCarrito);
         console.log("Respuesta de la API:", response);
+          
+        if (response) {
+        // Lógica para agregar el producto
+          toast.success("Producto agregado al carrito 🛒", {
+            position: "bottom-center",
+            autoClose: 3000, // Se cierra en 3 segundos
+          });
+        }else{
+          toast.success("Error al agregar al 🛒", {
+            position: "bottom-center",
+            autoClose: 3000, // Se cierra en 3 segundos
+          });
+        }
       }
     };
 
 
+    const iniciarBusquedaPorVoz = () => {
+      if (!recognition) {
+        alert("Tu navegador no soporta reconocimiento de voz.");
+        return;
+      }
+    
+      recognition.lang = 'es-ES'; // idioma español
+      recognition.start();
+    
+      recognition.onresult = (event: any) => {
+        const textoReconocido = event.results[0][0].transcript.toLowerCase();
+        console.log("Texto detectado por voz:", textoReconocido);
+        toast.warn(textoReconocido);
+
+        // 1. Buscar si es una categoría
+        for (const clave in categoriasMap) {
+          if (textoReconocido.includes(clave)) {
+            const categoriaId = categoriasMap[clave];
+            console.log(`Categoría detectada: ${clave} con ID: ${categoriaId}`);
+            mostrarPorCategoria(categoriaId);
+            return;
+          }
+        }
+    
+        // 2. Buscar si quiere agregar al carrito
+        if (textoReconocido.includes("agregar al carrito")) {
+          const nombreDicho = textoReconocido.replace("agregar al carrito", "").trim();
+    
+          if (nombreDicho.length === 0) {
+            toast.warn("No se entendió el nombre del producto.");
+            return;
+          }
+    
+          const productoEncontrado = catalogo.find((prod) =>
+            prod.nombre?.toLowerCase().includes(nombreDicho)
+          );
+    
+          if (productoEncontrado && productoEncontrado.id) {
+            agregarCarrito(Number(productoEncontrado.id));
+            toast.success(`"${productoEncontrado.nombre}" agregado al carrito 🛒`);
+          } else {
+            toast.error("No se encontró el producto.");
+          }
+    
+          return;
+        }
+    
+        // 3. Si no es ninguna de las anteriores, lo usamos como búsqueda normal
+        setBusqueda(textoReconocido);
+      };
+    
+      recognition.onerror = (event: any) => {
+        console.error("Error en reconocimiento de voz:", event.error);
+        toast.error("Error con el micrófono o reconocimiento de voz.");
+      };
+    };
+    
   return (
     <>
     <IonLoading isOpen={cargando} message="Cargando..." spinner="crescent" />
@@ -84,30 +179,24 @@ const Vistas: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-          
-        <IonAccordionGroup>
-          {/* Acordeón de Categorías */}
-          <IonAccordion value="categorias">
-            <IonItem slot="header">
-              <IonLabel>Selecciona una categoría</IonLabel>
-            </IonItem>
-            <div slot="content">
-              {/* Botones dentro del acordeón */}
-              <IonButton expand="block" onClick={() => mostrarPorCategoria(1)}>Telefonos</IonButton>
-              <IonButton expand="block" onClick={() => mostrarPorCategoria(2)}>Computadoras</IonButton>
-              <IonButton expand="block" onClick={() => mostrarPorCategoria(3)}>Tabletas</IonButton>
-              <IonButton expand="block" onClick={() => mostrarPorCategoria(4)}>Accesorios</IonButton>
-              <IonButton expand="block" onClick={() => mostrarPorCategoria(5)}>Televisores</IonButton>
-              <IonButton expand="block" onClick={() => mostrarPorCategoria(6)}>Electrodomésticos</IonButton>
-              <IonButton expand="block" onClick={() => mostrarPorCategoria(7)}>Audio</IonButton>
-              <IonButton expand="block" onClick={() => mostrarPorCategoria(8)}>Cámaras</IonButton>
-            </div>
-          </IonAccordion>
-        </IonAccordionGroup>
+
+        <div className="busqueda-contenedor">
+          <input
+            type="text"
+            placeholder="Buscar producto o categoría..."
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+            className="busqueda-input"
+          />
+          <IonButton onClick={iniciarBusquedaPorVoz} className="boton-voz">
+            🎤 Buscar con voz
+          </IonButton>
+        </div>
+
 
           <IonGrid className="table">
               <IonRow className='table-item-row'>
-              {catalogo.map((cata: catologo) => (
+              {(busqueda ? catalogoFiltrado : catalogo).map((cata: catologo) => (
                   <IonCol className='table-item' key={cata.id}>
                       <IonLabel className='titulo'>{cata.nombre}</IonLabel>
                       <img

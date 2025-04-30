@@ -1,7 +1,8 @@
 export async function buscarCatalogo(){
-    //let url = process.env.REACT_APP_API + 'customers'; 
+    const url = import.meta.env.VITE_API_URL;
+
     //console.log("API URL:", url); // Agregar log para verificar la URL
-    let response = await fetch('http://127.0.0.1:8000/api/products/catalogo/', {
+    let response = await fetch(url+'/api/products/catalogo/', {
         "method": 'GET',
         "headers": {
             "Content-Type": "application/json",
@@ -14,7 +15,8 @@ export async function buscarCatalogo(){
 
 
 export async function mostrarProductoPorCategoria(categ_id: number){
-    let response = await fetch('http://127.0.0.1:8000/api/products/categoria/'+categ_id,{
+    const url = import.meta.env.VITE_API_URL;
+    let response = await fetch(url+'/api/products/categoria/'+categ_id,{
         "method": 'GET',
         "headers": {
             "Content-Type": "application/json",

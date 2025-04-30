@@ -10,6 +10,8 @@ const Perfil: React.FC = () => {
 
     const {usuarioLogin} = useAuth();
     const [cargando, setCargando] = useState(true);
+
+    
     useEffect(() => {
         // muestra al sensacion de estar cargando
         const fetchData = async () => {

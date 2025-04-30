@@ -1,7 +1,9 @@
 import carrito from "./carrito";
 
 export async function agregarAlCarrito(caro: carrito){
-    //let url = process.env.REACT_APP_API + 'customers'; 
+
+    const url = import.meta.env.VITE_API_URL;
+
     //console.log("API URL:", url); // Agregar log para verificar la URL
     //const url = process.env.REACT_APP_API + 'add-to-cart';
     const body = {
@@ -15,7 +17,7 @@ export async function agregarAlCarrito(caro: carrito){
     }
     
     try {
-      let respuesta = await fetch("http://127.0.0.1:8000/api/cart/agregar-producto/", {
+      let respuesta = await fetch(url+ "/api/cart/agregar-producto/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -44,11 +46,12 @@ export async function agregarAlCarrito(caro: carrito){
 
 
 export async function obtenerCarrito(usuario_id: number) {
-    const url = `http://127.0.0.1:8000/api/cart/${usuario_id}`;
+  const url = import.meta.env.VITE_API_URL;
+ 
     console.log("URL:", url);
   
     try {
-      const respuesta = await fetch(url, {
+      const respuesta = await fetch(url+"/api/cart/"+usuario_id, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -77,7 +80,7 @@ export async function obtenerCarrito(usuario_id: number) {
   }
 
   export async function eliminarProductoDelCarrito(prod_id: number, usu_id: number){
-    const url = 'http://127.0.0.1:8000/api/cart/eliminar-del-carrito/';
+    const url = import.meta.env.VITE_API_URL;
 
     const body = {
       usuario_id: usu_id,
@@ -85,7 +88,7 @@ export async function obtenerCarrito(usuario_id: number) {
     };
 
     try {
-      const respuesta = await fetch (url, {
+      const respuesta = await fetch (url+"/api/cart/eliminar-del-carrito/", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -115,9 +118,9 @@ export async function obtenerCarrito(usuario_id: number) {
   }
 
   export async function pagarPorLaCompra(id: number){
-    const url = 'http://127.0.0.1:8000/api/payment/generar_pago_paypal/';
+    const url = import.meta.env.VITE_API_URL;
     try {
-      const respuesta = await fetch (url, {
+      const respuesta = await fetch (url+"/api/payment/generar_pago_paypal/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,14 +1,15 @@
 import Cliente from "./Cliente";
 
 export async function loginCustomer(cliente: Cliente) {
-    const url = 'http://127.0.0.1:8000/api/auth/login/'; // URL de tu endpoint de login
+    const url = import.meta.env.VITE_API_URL;
+
     const body = {
         email: cliente.email,
         password: cliente.password
     };
     
     try {
-        let respuesta = await fetch(url, {
+        let respuesta = await fetch(url+'/api/auth/login/', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"

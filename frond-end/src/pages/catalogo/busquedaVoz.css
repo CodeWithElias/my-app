@@ -1,0 +1,43 @@
+.busqueda-contenedor {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px auto;
+    max-width: 600px;
+    padding: 0 10px;
+    flex-wrap: wrap;
+  }
+  
+  .busqueda-input {
+    flex: 1;
+    padding: 12px 16px;
+    font-size: 16px;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    transition: border 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+  
+  .busqueda-input:focus {
+    border-color: #0078d7;
+    box-shadow: 0 0 0 3px rgba(0, 120, 215, 0.2);
+  }
+  
+  .boton-voz {
+    --background: #0078d7;
+    --color: white;
+    --border-radius: 12px;
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --box-shadow: 0 4px 12px rgba(0, 120, 215, 0.2);
+    font-weight: bold;
+    transition: background 0.2s ease;
+  }
+  
+  .boton-voz:hover {
+    --background: #005fa3;
+  }
+  

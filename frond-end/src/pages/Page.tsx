@@ -7,7 +7,7 @@ import { buscarCatalogo } from './catalogo/catalogoApi';
 import { useAuth } from './Cliente/authContext';
 import { agregarAlCarrito } from './carrito/carritoApi';
 import { toast } from 'react-toastify';
-import Header from '../components/Menu';
+
 
 const Page: React.FC = () => {
 
@@ -19,14 +19,9 @@ const Page: React.FC = () => {
   const [cargando, setCargando] = useState(true);
 
   useEffect(() =>{
-      // muestra al sensacion de estar cargando
-      const fetchData = async () => {
-        // Simulamos una consulta a la API
-        await new Promise((res) => setTimeout(res, 1500));
-        setCargando(false);
-    };          
-    fetchData();
+      
     search();
+    
   }, []);
       
 
@@ -39,6 +34,7 @@ const Page: React.FC = () => {
       }
               
           setCatalogo(result);
+          setCargando(false);
       
   }
 

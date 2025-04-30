@@ -7,6 +7,7 @@ import Producto from '../producto/Producto';
 import { useAuth } from '../Cliente/authContext';
 import { logoPaypal, trash } from 'ionicons/icons';
 import './carrito.css';
+import { toast } from 'react-toastify';
 
 const CarritoPage: React.FC = () => {
   
@@ -15,25 +16,21 @@ const CarritoPage: React.FC = () => {
   const {usuarioLogin} = useAuth();
   const [cargando, setCargando] = useState(true);
 
-  useEffect(() => {
 
-        // muestra al sensacion de estar cargando
-        const fetchData = async () => {
-          // Simulamos una consulta a la API
-          await new Promise((res) => setTimeout(res, 1500));
-          setCargando(false);
-      };          
-      fetchData();
+  useEffect(() =>{
     search();
-  },);
+  }, );
+
 
   const search = async () => {
+
       if (usuarioLogin && usuarioLogin.id) {
         const result = await obtenerCarrito(Number(usuarioLogin.id));
         console.log("Contenido recibido:", result);
       
         if (result && Array.isArray(result.productos)) {
           setProducto(result.productos);
+          setCargando(false);
         }
       } else {
         console.error("Error: No se pudo obtener la lista de productos del carrito.");
@@ -48,8 +45,19 @@ const CarritoPage: React.FC = () => {
       }
       
       search()
+      
+        toast.success("Producto eliminado 🛒", {
+          position: "bottom-center",
+          autoClose: 3000, // Se cierra en 3 segundos
+        });
+      
     } catch (error){
 
+      toast.success("Error al eliminar el producto", {
+        position: "bottom-center",
+        autoClose: 3000, // Se cierra en 3 segundos
+      });
+    
       if (error instanceof Error) {
         console.error("Error en la petición:", error.message);
       } else {

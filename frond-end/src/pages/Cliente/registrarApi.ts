@@ -1,7 +1,8 @@
 import Cliente from "./Cliente";
 
 export async function registrarCliente(cliente: Cliente) {
-    const url = 'http://127.0.0.1:8000/api/auth/register/'; // URL de tu endpoint de login
+    const url = import.meta.env.VITE_API_URL;
+    
     const body = {
         nombre_completo: cliente.nombre,
         email: cliente.email,
@@ -12,7 +13,7 @@ export async function registrarCliente(cliente: Cliente) {
     };
     
     try {
-        let respuesta = await fetch(url, {
+        let respuesta = await fetch(url+'/api/auth/register/', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
